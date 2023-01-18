@@ -10,6 +10,27 @@ import '../Api/CategoriesType.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
   final fireStore = FirebaseFirestore.instance.collection('Items').snapshots();
+  final fireStoreRef = FirebaseFirestore.instance.collection("Items");
+
+  void setFavorite(snapShot, index){
+    bool fav;
+    if (snapShot.data!
+        .docs[index]
+    ["isFavorite"] !=
+        true) {
+      fav = true;
+    } else {
+      fav = false;
+    }
+    fireStoreRef
+        .doc(snapShot.data!
+        .docs[index].id
+        .toString())
+        .update({
+      "isFavorite":
+      fav ?? false
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +202,9 @@ class HomePage extends StatelessWidget {
                           AsyncSnapshot<QuerySnapshot> snapShot) {
                         if (snapShot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Expanded(child: Center(child: CircularProgressIndicator()));
+                          return const Expanded(
+                              child:
+                                  Center(child: CircularProgressIndicator()));
                         }
                         if (snapShot.hasError) {
                           return const Center(
@@ -190,7 +213,7 @@ class HomePage extends StatelessWidget {
                         return snapShot.data!.docs.isNotEmpty
                             ? SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * .31,
+                                    MediaQuery.of(context).size.height * .33,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: snapShot.data!.docs.length,
@@ -209,10 +232,10 @@ class HomePage extends StatelessWidget {
                                             children: [
                                               Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    height: 200,
+                                                    height: 220,
                                                     width: 180,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
@@ -236,59 +259,65 @@ class HomePage extends StatelessWidget {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Text(
-                                                    "${snapShot.data!.docs[index]["title"]}",
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 20),
+                                                    child: Text(
+                                                      "${snapShot.data!.docs[index]["title"]}",
+                                                      style: const TextStyle(
+                                                          color: Colors.grey, fontSize: 16),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 180,
                                                     child: SizedBox(
                                                       height: 40,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          RichText(
-                                                            text: TextSpan(
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .black),
-                                                                children: [
-                                                                  const TextSpan(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .black),
+                                                                  children: [
+                                                                    const TextSpan(
+                                                                        text:
+                                                                            " \$",
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                                16)),
+                                                                    const WidgetSpan(
+                                                                        child:
+                                                                            SizedBox(
+                                                                      width: 5,
+                                                                    )),
+                                                                    TextSpan(
                                                                       text:
-                                                                          " \$",
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              16)),
-                                                                  const WidgetSpan(
-                                                                      child:
-                                                                          SizedBox(
-                                                                    width: 5,
-                                                                  )),
-                                                                  TextSpan(
-                                                                    text:
-                                                                        "${snapShot.data!.docs[index]["price"]}",
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          17,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  )
-                                                                ]),
-                                                          ),
-                                                          IconButton(
-                                                            onPressed: () {},
-                                                            icon: const Icon(
-                                                                Icons.add),
-                                                          ),
-                                                        ],
+                                                                          "${snapShot.data!.docs[index]["price"]}",
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            17,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                      ),
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                            IconButton(
+                                                              onPressed: () {},
+                                                              icon: const Icon(
+                                                                  Icons.add),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   )
@@ -298,22 +327,14 @@ class HomePage extends StatelessWidget {
                                                 right: 10,
                                                 top: 10,
                                                 child: CircleAvatar(
-                                                  radius: 20,
                                                   backgroundColor: Colors.white,
                                                   child: IconButton(
                                                     onPressed: () {
-                                                      favoriteProvider
-                                                          .setFavItem(snapShot
-                                                              .data!
-                                                              .docs[index]
-                                                              .id);
+                                                      setFavorite(snapShot, index);
                                                     },
-                                                    icon: favoriteProvider
-                                                            .favItems
-                                                            .contains(snapShot
-                                                                .data!
+                                                    icon: snapShot.data!
                                                                 .docs[index]
-                                                                .id)
+                                                            ['isFavorite']
                                                         ? const Icon(
                                                             Icons.favorite,
                                                             color: Colors.black,
@@ -332,10 +353,10 @@ class HomePage extends StatelessWidget {
                                       );
                                     }))
                             : const Expanded(
-                              child: Center(
-                                child: Text("There isn't any data to show"),
-                              ),
-                            );
+                                child: Center(
+                                  child: Text("There isn't any data to show"),
+                                ),
+                              );
                       })
                 ],
               ),

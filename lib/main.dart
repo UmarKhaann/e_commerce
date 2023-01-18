@@ -1,4 +1,5 @@
 import 'package:e_commerce/Pages/HomePage.dart';
+import 'package:e_commerce/Pages/WelcomePages/WelcomePage1.dart';
 import 'package:e_commerce/provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,9 @@ class Ecommerce extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: WelcomePage1(),
     );
   }
 }

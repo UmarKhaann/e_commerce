@@ -151,17 +151,17 @@ class _AddItemState extends State<AddItem> {
                     child: Column(
                       children: [
                         CustomInputField(
-                            prefix: const Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             controller: titleController,
                             labelText: "Enter Title",
                             keyboardType: TextInputType.name),
                         CustomInputField(
-                            prefix: const Text("\$"),
+                            icon: const Icon(Icons.attach_money),
                             controller: priceController,
                             labelText: "Enter Price",
                             keyboardType: TextInputType.number),
                         CustomInputField(
-                            prefix: const Text(""),
+                            icon: const Icon(Icons.folder),
                             controller: categoryController,
                             labelText: "Enter Category",
                             keyboardType: TextInputType.name),
@@ -258,14 +258,14 @@ class CustomInputField extends StatelessWidget {
       {required this.controller,
       required this.labelText,
       required this.keyboardType,
-      required this.prefix,
+      required this.icon,
       Key? key})
       : super(key: key);
 
   final TextEditingController controller;
   final String labelText;
   final TextInputType keyboardType;
-  final Widget prefix;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -280,8 +280,9 @@ class CustomInputField extends StatelessWidget {
           }
         },
         controller: controller,
+        textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
-            prefix: prefix,
+            prefixIcon: icon,
             labelText: labelText,
             border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.black, width: 2.0),

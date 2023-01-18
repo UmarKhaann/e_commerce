@@ -78,14 +78,14 @@ class ItemsProvider with ChangeNotifier {
   //   },
   // ];
 
-  List _favItems = [];
+  // List _favItems = [];
   final List _cart = [];
   File? _imageFile;
   bool _isLoading = false;
 
   // get items => _items;
 
-  get favItems => _favItems;
+  // get favItems => _favItems;
   get cart => _cart;
   get imageFile => _imageFile;
   get isLoading => _isLoading;
@@ -104,14 +104,14 @@ class ItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setFavItem(obj) {
-    if (!_favItems.contains(obj)) {
-      _favItems.add(obj);
-    } else {
-      _favItems.remove(obj);
-    }
-    notifyListeners();
-  }
+  // void setFavItem(obj) {
+  //   if (!_favItems.contains(obj)) {
+  //     _favItems.add(obj);
+  //   } else {
+  //     _favItems.remove(obj);
+  //   }
+  //   notifyListeners();
+  // }
 
   void addToCart(obj) {
     _cart.add(obj);
