@@ -47,7 +47,7 @@ class WelcomePage2 extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                                    builder: (context) => HomePage()));
                           },
                           child: const Text(
                             "Skip",
@@ -60,7 +60,7 @@ class WelcomePage2 extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                                    builder: (context) => HomePage()));
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,

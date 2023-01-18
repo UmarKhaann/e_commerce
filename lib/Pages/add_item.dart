@@ -230,14 +230,14 @@ class _AddItemState extends State<AddItem> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => HomePage()));
                   break;
                 case 1:
                   Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Favorites()));
+                          builder: (context) => Favorites()));
                   break;
                 case 3:
                   Navigator.pop(context);

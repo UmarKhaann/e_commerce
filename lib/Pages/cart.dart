@@ -78,14 +78,14 @@ class Cart extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => HomePage()));
                   break;
                 case 1:
                   Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Favorites()));
+                          builder: (context) => Favorites()));
                   break;
                 case 2:
                   Navigator.pop(context);

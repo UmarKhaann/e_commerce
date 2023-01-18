@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/Pages/FavoritesPage.dart';
 import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
@@ -7,7 +8,8 @@ import 'package:provider/provider.dart';
 import '../Api/CategoriesType.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+  final fireStore = FirebaseFirestore.instance.collection('Items').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -173,127 +175,168 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .31,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: favoriteProvider.items.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.black, width: 2),
-                                  borderRadius: BorderRadius.circular(17)),
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        width: 180,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topRight:
-                                                        Radius.circular(15),
-                                                    topLeft:
-                                                        Radius.circular(15)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                favoriteProvider.items[index]
-                                                    ["Image"],
-                                              ),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "${favoriteProvider.items[index]["Title"]}",
-                                        style:
-                                            const TextStyle(color: Colors.grey),
-                                      ),
-                                      SizedBox(
-                                        width: 180,
-                                        child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                  StreamBuilder<QuerySnapshot>(
+                      stream: fireStore,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapShot) {
+                        if (snapShot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Expanded(child: Center(child: CircularProgressIndicator()));
+                        }
+                        if (snapShot.hasError) {
+                          return const Center(
+                              child: Text("an error has occurred"));
+                        }
+                        return snapShot.data!.docs.isNotEmpty
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .31,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapShot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2),
+                                              borderRadius:
+                                                  BorderRadius.circular(17)),
+                                          child: Stack(
                                             children: [
-                                              RichText(
-                                                text: TextSpan(
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 200,
+                                                    width: 180,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        15),
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        15)),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: NetworkImage(
+                                                              snapShot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ["imageUrl"]),
+                                                        )),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    "${snapShot.data!.docs[index]["title"]}",
                                                     style: const TextStyle(
-                                                        color: Colors.black),
-                                                    children: [
-                                                      const TextSpan(
-                                                          text: " \$",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16)),
-                                                      const WidgetSpan(
-                                                          child: SizedBox(
-                                                        width: 5,
-                                                      )),
-                                                      TextSpan(
-                                                        text:
-                                                            "${favoriteProvider.items[index]["Price"]}",
-                                                        style: const TextStyle(
-                                                          fontSize: 17,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      )
-                                                    ]),
+                                                        color: Colors.grey),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 180,
+                                                    child: SizedBox(
+                                                      height: 40,
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          RichText(
+                                                            text: TextSpan(
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                                children: [
+                                                                  const TextSpan(
+                                                                      text:
+                                                                          " \$",
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              16)),
+                                                                  const WidgetSpan(
+                                                                      child:
+                                                                          SizedBox(
+                                                                    width: 5,
+                                                                  )),
+                                                                  TextSpan(
+                                                                    text:
+                                                                        "${snapShot.data!.docs[index]["price"]}",
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                                  )
+                                                                ]),
+                                                          ),
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(
+                                                                Icons.add),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(Icons.add),
+                                              Positioned(
+                                                right: 10,
+                                                top: 10,
+                                                child: CircleAvatar(
+                                                  radius: 20,
+                                                  backgroundColor: Colors.white,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      favoriteProvider
+                                                          .setFavItem(snapShot
+                                                              .data!
+                                                              .docs[index]
+                                                              .id);
+                                                    },
+                                                    icon: favoriteProvider
+                                                            .favItems
+                                                            .contains(snapShot
+                                                                .data!
+                                                                .docs[index]
+                                                                .id)
+                                                        ? const Icon(
+                                                            Icons.favorite,
+                                                            color: Colors.black,
+                                                          )
+                                                        : const Icon(
+                                                            Icons
+                                                                .favorite_outline,
+                                                            color: Colors.black,
+                                                          ),
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Positioned(
-                                    right: 10,
-                                    top: 10,
-                                    child: CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Colors.white,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            favoriteProvider.setFavItem(
-                                                favoriteProvider.items[index]);
-                                          },
-                                          icon: favoriteProvider.favItems
-                                                  .contains(favoriteProvider
-                                                      .items[index])
-                                              ? const Icon(
-                                                  Icons.favorite,
-                                                  color: Colors.black,
-                                                )
-                                              : const Icon(
-                                                  Icons.favorite_outline,
-                                                  color: Colors.black,
-                                                )),
-                                    ),
-                                  ),
-                                ],
+                                      );
+                                    }))
+                            : const Expanded(
+                              child: Center(
+                                child: Text("There isn't any data to show"),
                               ),
-                            ),
-                          );
-                        }),
-                  )
+                            );
+                      })
                 ],
               ),
             ),
@@ -332,7 +375,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Favorites()));
+                                builder: (context) => Favorites()));
 
                         break;
                       case 2:

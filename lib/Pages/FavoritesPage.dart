@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/Pages/HomePage.dart';
 import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
@@ -6,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatelessWidget {
-  const Favorites({Key? key}) : super(key: key);
+  Favorites({Key? key}) : super(key: key);
+
+  final firestore = FirebaseFirestore.instance.collection('Items').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -31,108 +34,112 @@ class Favorites extends StatelessWidget {
               return const Center(
                   child: Text("You haven't Selected anything as Favorite"));
             } else {
-              return Padding(
-                padding:
+              return StreamBuilder<QuerySnapshot>(
+                stream: firestore,
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                  return Padding(
+                    padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 150 / 205,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 0,
-                      crossAxisSpacing: 0),
-                  itemCount: favoriteProvider.favItems.length,
-                  itemBuilder: (context, index) {
-                    return Center(
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 150 / 205,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 0,
+                          crossAxisSpacing: 0),
+                      itemCount: favoriteProvider.favItems.length,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: Stack(
                             children: [
-                              Container(
-                                height: 200,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(
-                                        favoriteProvider.favItems[index]
-                                            ["Image"],
-                                      ),
-                                    )),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "${favoriteProvider.favItems[index]["Title"]}",
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                              SizedBox(
-                                width: 160,
-                                child: SizedBox(
-                                  height: 40,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            children: [
-                                              const TextSpan(
-                                                text: "\$",
-                                              ),
-                                              const WidgetSpan(
-                                                  child: SizedBox(
-                                                width: 5,
-                                              )),
-                                              TextSpan(
-                                                text:
-                                                    "${favoriteProvider.favItems[index]["Price"]}",
-                                                style: const TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            ]),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.add),
-                                      ),
-                                    ],
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 200,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                            snapshot.data!.docs[index]['image'],
+                                          ),
+                                        )),
                                   ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "${favoriteProvider.favItems[index]["title"]}",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    width: 160,
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          RichText(
+                                            text: TextSpan(
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                                children: [
+                                                  const TextSpan(
+                                                    text: "\$",
+                                                  ),
+                                                  const WidgetSpan(
+                                                      child: SizedBox(
+                                                        width: 5,
+                                                      )),
+                                                  TextSpan(
+                                                    text:
+                                                    "${favoriteProvider.favItems[index]["price"]}",
+                                                    style: const TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  )
+                                                ]),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(Icons.add),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Positioned(
+                                right: 20,
+                                top: 10,
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.white,
+                                  child: IconButton(
+                                      onPressed: () {
+                                        favoriteProvider.setFavItem(
+                                            favoriteProvider.favItems[index]);
+                                      },
+                                      icon: const Icon(
+                                        Icons.favorite,
+                                        color: Colors.black,
+                                      )),
                                 ),
-                              )
+                              ),
                             ],
                           ),
-                          Positioned(
-                            right: 20,
-                            top: 10,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.white,
-                              child: IconButton(
-                                  onPressed: () {
-                                    favoriteProvider.setFavItem(
-                                        favoriteProvider.favItems[index]);
-                                  },
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.black,
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
             }
           },
@@ -171,7 +178,7 @@ class Favorites extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => HomePage()));
                   break;
                 case 2:
                   Navigator.pop(context);
@@ -181,7 +188,7 @@ class Favorites extends StatelessWidget {
                 case 3:
                   Navigator.pop(context);
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Cart()));
+                      MaterialPageRoute(builder: (context) => Cart()));
                   break;
               }
             },
