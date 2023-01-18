@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/Pages/FavoritesPage.dart';
 import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
@@ -12,7 +11,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Consumer<ItemsProvider>(
       builder: (BuildContext context, favoriteProvider, child) {
         return SafeArea(
@@ -274,9 +272,12 @@ class HomePage extends StatelessWidget {
                                       backgroundColor: Colors.white,
                                       child: IconButton(
                                           onPressed: () {
-                                            favoriteProvider.setFavItem(favoriteProvider.items[index]);
+                                            favoriteProvider.setFavItem(
+                                                favoriteProvider.items[index]);
                                           },
-                                          icon: favoriteProvider.favItems.contains(favoriteProvider.items[index])
+                                          icon: favoriteProvider.favItems
+                                                  .contains(favoriteProvider
+                                                      .items[index])
                                               ? const Icon(
                                                   Icons.favorite,
                                                   color: Colors.black,
@@ -296,7 +297,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.black),
               child: ClipRRect(
@@ -318,8 +318,7 @@ class HomePage extends StatelessWidget {
                         icon: Icon(Icons.favorite_rounded, size: 32),
                         label: "Favorite"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.add, size: 32),
-                        label: "Add"),
+                        icon: Icon(Icons.add, size: 32), label: "Add"),
                     BottomNavigationBarItem(
                         icon: Icon(Icons.shopping_bag, size: 32),
                         label: "Cart"),
@@ -338,10 +337,8 @@ class HomePage extends StatelessWidget {
                         break;
                       case 2:
                         Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddItem()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => AddItem()));
                         break;
                       case 3:
                         Navigator.pop(context);
@@ -350,12 +347,12 @@ class HomePage extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => const Cart()));
                         break;
-                      // case 3:
+                      // case 4:
                       //   Navigator.pop(context);
                       //   Navigator.push(
                       //       context,
                       //       MaterialPageRoute(
-                      //           builder: (context) => const Favorites()));
+                      //           builder: (context) => ));
                       //   break;
                     }
                   },

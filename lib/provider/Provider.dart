@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 class ItemsProvider with ChangeNotifier {
@@ -77,12 +79,32 @@ class ItemsProvider with ChangeNotifier {
   ];
   final List _favItems = [];
   final List _cart = [];
-
+  File? _imageFile;
+  bool _isLoading = false;
 
   get items => _items;
+
   get favItems => _favItems;
+
   get cart => _cart;
 
+  get imageFile => _imageFile;
+
+  get isLoading => _isLoading;
+
+  void setIsLoading(newValue) {
+    _isLoading = newValue;
+    notifyListeners();
+  }
+
+  void setImageFile(newFile) {
+    if (newFile != null) {
+      _imageFile = File(newFile);
+    } else {
+      _imageFile = null;
+    }
+    notifyListeners();
+  }
 
   void setFavItem(obj) {
     if (!_favItems.contains(obj)) {
@@ -93,9 +115,8 @@ class ItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addToCart(obj){
+  void addToCart(obj) {
     _cart.add(obj);
     notifyListeners();
   }
-
 }

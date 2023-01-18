@@ -65,8 +65,7 @@ class Cart extends StatelessWidget {
                   icon: Icon(Icons.favorite_rounded, size: 32),
                   label: "Favorite"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.add, size: 32),
-                  label: "Add"),
+                  icon: Icon(Icons.add, size: 32), label: "Add"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_bag, size: 32), label: "Cart"),
               BottomNavigationBarItem(
@@ -90,10 +89,8 @@ class Cart extends StatelessWidget {
                   break;
                 case 2:
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddItem()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddItem()));
                   break;
               }
             },
