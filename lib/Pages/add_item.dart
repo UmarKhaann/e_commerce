@@ -25,6 +25,7 @@ class _AddItemState extends State<AddItem> {
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   Future<void> selectImage() async {
     final itemProvider = Provider.of<ItemsProvider>(context, listen: false);
@@ -49,13 +50,16 @@ class _AddItemState extends State<AddItem> {
           UploadTask uploadTask = ref.putFile(itemProvider.imageFile!.absolute);
           Future.value(uploadTask).then((value) async {
             var newUrl = await ref.getDownloadURL();
+            String id = DateTime.now().microsecondsSinceEpoch.toString();
             final db = firestore
                 .collection('Items')
-                .doc(DateTime.now().microsecondsSinceEpoch.toString());
+                .doc(id);
             db.set({
+              "id": id,
               "title": titleController.text.toString(),
               "price": priceController.text.toString(),
               "category": categoryController.text.toString(),
+              "description": descriptionController.text.toString(),
               "imageUrl": newUrl,
               "isFavorite": false,
             }).then((value) {
@@ -72,10 +76,11 @@ class _AddItemState extends State<AddItem> {
             titleController.clear();
             priceController.clear();
             categoryController.clear();
+            descriptionController.clear();
           }).onError((error, stackTrace) {
             debugPrint(error.toString());
           });
-        }else{
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("First select an Image to upload")));
         }
@@ -90,13 +95,13 @@ class _AddItemState extends State<AddItem> {
     titleController.dispose();
     priceController.dispose();
     categoryController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -108,12 +113,13 @@ class _AddItemState extends State<AddItem> {
       ),
       body: Consumer<ItemsProvider>(
         builder: (BuildContext context, itemProvider, Widget? child) {
-          return Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Stack(
-                  children: [
+          return SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height * .7,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Stack(children: [
                     Container(
                         width: 150,
                         height: 150,
@@ -132,24 +138,21 @@ class _AddItemState extends State<AddItem> {
                                     FileImage(itemProvider.imageFile!.absolute),
                               )),
                     Positioned(
-                      right: 5,
-                      bottom: 0,
-                      child: IconButton(
-                          onPressed: () {
-                            selectImage();
-                          },
-                          icon:
-                              Icon(Icons.add_a_photo, color: Colors.grey[600])),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
+                        right: 5,
+                        bottom: 0,
+                        child: IconButton(
+                            onPressed: () {
+                              selectImage();
+                            },
+                            icon: Icon(Icons.add_a_photo,
+                                color: Colors.grey[600])))
+                  ]),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Form(
+                      key: _formKey,
+                      child: Column(children: [
                         CustomInputField(
                             icon: const Icon(Icons.edit),
                             controller: titleController,
@@ -165,34 +168,36 @@ class _AddItemState extends State<AddItem> {
                             controller: categoryController,
                             labelText: "Enter Category",
                             keyboardType: TextInputType.name),
-                      ],
-                    )),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(child: Container()),
-                itemProvider.isLoading
-                    ? const Padding(
-                        padding: EdgeInsets.only(bottom: 18.0),
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          color: Colors.black,
+                        CustomInputField(
+                            icon: const Icon(Icons.description),
+                            controller: descriptionController,
+                            labelText: "Enter Description",
+                            keyboardType: TextInputType.name)
+                      ])),
+                  Expanded(child: Container()),
+                  itemProvider.isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 18.0),
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                            color: Colors.black,
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            uploadItem();
+                          },
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.grey)),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25.0, vertical: 15),
+                            child: Text("Add"),
+                          ),
                         ),
-                      )
-                    : ElevatedButton(
-                        onPressed: () {
-                          uploadItem();
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.grey)),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 15),
-                          child: Text("Add"),
-                        ),
-                      ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -227,17 +232,13 @@ class _AddItemState extends State<AddItem> {
               switch (index) {
                 case 0:
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                   break;
                 case 1:
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Favorites()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Favorites()));
                   break;
                 case 3:
                   Navigator.pop(context);
