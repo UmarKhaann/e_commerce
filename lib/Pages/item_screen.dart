@@ -53,8 +53,11 @@ class ItemScreen extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height * .45,
-                      child: FittedBox(
-                          fit: BoxFit.fitWidth, child: Image.network(imageUrl)),
+                      child: Hero(
+                        tag: 'image$id',
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth, child: Image.network(imageUrl)),
+                      ),
                     ),
                     SizedBox(
                       width: double.infinity,

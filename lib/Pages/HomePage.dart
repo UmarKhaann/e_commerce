@@ -3,13 +3,14 @@ import 'package:e_commerce/Pages/FavoritesPage.dart';
 import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
 import 'package:e_commerce/Pages/item_screen.dart';
+import 'package:e_commerce/Pages/profile_screen.dart';
 import 'package:e_commerce/provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Api/CategoriesType.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class HomePageTab extends StatelessWidget {
+  HomePageTab({Key? key}) : super(key: key);
   final fireStore = FirebaseFirestore.instance.collection('Items').snapshots();
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
 
@@ -40,6 +41,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Consumer<ItemsProvider>(
       builder: (BuildContext context, favoriteProvider, child) {
         return SafeArea(
@@ -48,34 +50,28 @@ class HomePage extends StatelessWidget {
             backgroundColor: Colors.grey[200],
             body: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 1,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * .8,
-                                child: TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "Search",
-                                        contentPadding:
-                                            const EdgeInsets.all(20),
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        suffixIcon: const Icon(Icons.search)))),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(Icons.filter_alt)
-                          ],
-                        )),
-                    const SizedBox(
-                      height: 10,
+                    Row(
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * .8,
+                            child: TextField(
+                                decoration: InputDecoration(
+                                    hintText: "Search",
+                                    contentPadding: const EdgeInsets.all(20),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(20)),
+                                    suffixIcon: const Icon(Icons.search)))),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Icon(Icons.filter_alt)
+                      ],
                     ),
                     Expanded(
                         child: ListView.builder(
@@ -83,49 +79,49 @@ class HomePage extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 20),
+                                  padding: const EdgeInsets.only(
+                                      top: 30,right: 10,left: 10),
                                   child: Column(
                                     children: [
                                       categoriesType[index]["Name"] == "All"
                                           ? Container(
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      blurRadius: 7,
-                                                      color: Colors.grey,
-                                                      spreadRadius: .5,
-                                                      offset: Offset(0.0, 0.75))
-                                                ],
-                                              ),
-                                              child: const CircleAvatar(
-                                                radius: 35,
-                                                backgroundColor: Colors.white,
-                                                child:
-                                                    Icon(Icons.all_inclusive),
-                                              ))
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  blurRadius: 7,
+                                                  color: Colors.grey,
+                                                  spreadRadius: .5,
+                                                  offset: Offset(0.0, 0.75))
+                                            ],
+                                          ),
+                                          child: CircleAvatar(
+                                            radius: size.height * .04,
+                                            backgroundColor: Colors.white,
+                                            child: const Icon(
+                                                Icons.all_inclusive),
+                                          ))
                                           : Container(
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    blurRadius: 7,
-                                                    color: Colors.grey,
-                                                    spreadRadius: .5,
-                                                  )
-                                                ],
-                                              ),
-                                              child: CircleAvatar(
-                                                radius: 35,
-                                                backgroundImage: AssetImage(
-                                                    categoriesType[index]
-                                                        ["Icon"]),
-                                                backgroundColor: Colors.white,
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 10,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 7,
+                                              color: Colors.grey,
+                                              spreadRadius: .5,
+                                            )
+                                          ],
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: size.height * .04,
+                                          backgroundImage: AssetImage(
+                                              categoriesType[index]
+                                              ["Icon"]),
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: size.height * .01,
                                       ),
                                       Text(
                                         categoriesType[index]["Name"],
@@ -144,8 +140,8 @@ class HomePage extends StatelessWidget {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: size.height * .02, horizontal: 10),
                             child: ListTile(
                                 horizontalTitleGap: 25,
                                 leading: Container(
@@ -158,7 +154,7 @@ class HomePage extends StatelessWidget {
                                               spreadRadius: 2)
                                         ],
                                         borderRadius:
-                                            BorderRadius.circular(10)),
+                                        BorderRadius.circular(10)),
                                     padding: const EdgeInsets.all(15),
                                     child: const Icon(
                                       Icons.monitor_heart,
@@ -183,18 +179,16 @@ class HomePage extends StatelessWidget {
                                   Icons.arrow_forward_ios,
                                   color: Colors.black,
                                 )))),
-                    const SizedBox(
-                      height: 30,
+                    SizedBox(
+                      height: size.height * .03,
                     ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          "New Items",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        )),
-                    const SizedBox(
-                      height: 20,
+                    const Text(
+                      "New Items",
+                      style: TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: size.height * .02,
                     ),
                     StreamBuilder<QuerySnapshot>(
                         stream: fireStore,
@@ -204,7 +198,7 @@ class HomePage extends StatelessWidget {
                               ConnectionState.waiting) {
                             return const Expanded(
                                 child:
-                                    Center(child: CircularProgressIndicator()));
+                                Center(child: CircularProgressIndicator()));
                           }
                           if (snapShot.hasError) {
                             return const Center(
@@ -212,141 +206,182 @@ class HomePage extends StatelessWidget {
                           }
                           return snapShot.data!.docs.isNotEmpty
                               ? Expanded(
-                                  flex: 2,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: snapShot.data!.docs.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0),
-                                            child: Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black,
-                                                        width: 2),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            17)),
-                                                child: Stack(children: [
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                            height: 220,
-                                                            width: 180,
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: const BorderRadius
-                                                                        .only(
-                                                                    topRight:
-                                                                        Radius.circular(
-                                                                            15),
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            15)),
-                                                                image: DecorationImage(
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    image: NetworkImage(snapShot
-                                                                            .data!
-                                                                            .docs[index]
-                                                                        ["imageUrl"])))),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 20),
-                                                            child: Text(
-                                                                "${snapShot.data!.docs[index]["title"]}",
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    fontSize:
-                                                                        16))),
-                                                        SizedBox(
-                                                            width: 180,
-                                                            height: 40,
-                                                            child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10),
-                                                                child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      RichText(
-                                                                          text: TextSpan(
-                                                                              style: const TextStyle(color: Colors.black),
-                                                                              children: [
-                                                                            const TextSpan(
-                                                                                text: " \$",
-                                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                                            const WidgetSpan(child: SizedBox(width: 5)),
-                                                                            TextSpan(
-                                                                                text: "${snapShot.data!.docs[index]["price"]}",
-                                                                                style: const TextStyle(
-                                                                                  fontSize: 17,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                ))
-                                                                          ])),
-                                                                      IconButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            navigateToItemScreen(
-                                                                                context,
-                                                                                snapShot,
-                                                                                index, snapShot.data!.docs[index].id.toString());
-                                                                          },
-                                                                          icon:
-                                                                              const Icon(Icons.add))
-                                                                    ])))
-                                                      ]),
-                                                  Positioned(
-                                                      right: 10,
-                                                      top: 10,
-                                                      child: CircleAvatar(
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          child: IconButton(
-                                                              onPressed: () {
-                                                                setFavorite(
-                                                                    snapShot,
-                                                                    index);
-                                                              },
-                                                              icon: snapShot
-                                                                          .data!
-                                                                          .docs[index]
-                                                                      [
-                                                                      'isFavorite']
-                                                                  ? const Icon(
-                                                                      Icons
-                                                                          .favorite,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    )
-                                                                  : const Icon(
-                                                                      Icons
-                                                                          .favorite_outline,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ))))
-                                                ])));
-                                      }))
+                              flex: 2,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapShot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2),
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  17)),
+                                          child: Stack(children: [
+                                            Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Hero(
+                                                    tag:
+                                                    'image${snapShot.data!.docs[index].id}',
+                                                    child: Container(
+                                                        height: size.height *
+                                                            .24,
+                                                        width: size.width *
+                                                            .43,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: const BorderRadius.only(
+                                                                topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                                topLeft: Radius.circular(
+                                                                    15)),
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: NetworkImage(snapShot
+                                                                    .data!
+                                                                    .docs[index]["imageUrl"])))),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                    size.height * .01,
+                                                  ),
+                                                  Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .only(
+                                                          left: 20),
+                                                      child: Text(
+                                                          "${snapShot.data!.docs[index]["title"]}",
+                                                          style: const TextStyle(
+                                                              color: Colors
+                                                                  .grey,
+                                                              fontSize:
+                                                              16))),
+                                                  SizedBox(
+                                                      width: 180,
+                                                      height:
+                                                      size.height *
+                                                          .04,
+                                                      child: Padding(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .only(
+                                                              left:
+                                                              10),
+                                                          child: Row(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                              children: [
+                                                                RichText(
+                                                                    text: TextSpan(
+                                                                        style: const TextStyle(color: Colors.black),
+                                                                        children: [
+                                                                          const TextSpan(
+                                                                              text: " \$",
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                                                          const WidgetSpan(child: SizedBox(width: 5)),
+                                                                          TextSpan(
+                                                                              text: "${snapShot.data!.docs[index]["price"]}",
+                                                                              style: const TextStyle(
+                                                                                fontSize: 17,
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ))
+                                                                        ])),
+                                                                IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      navigateToItemScreen(
+                                                                          context,
+                                                                          snapShot,
+                                                                          index,
+                                                                          snapShot.data!.docs[index].id.toString());
+                                                                    },
+                                                                    icon:
+                                                                    const Icon(Icons.add))
+                                                              ])))
+                                                ]),
+                                            Positioned(
+                                                right: 10,
+                                                top: 10,
+                                                child: CircleAvatar(
+                                                    backgroundColor:
+                                                    Colors.white,
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          setFavorite(
+                                                              snapShot,
+                                                              index);
+                                                        },
+                                                        icon: snapShot
+                                                            .data!
+                                                            .docs[index]
+                                                        [
+                                                        'isFavorite']
+                                                            ? const Icon(
+                                                          Icons
+                                                              .favorite,
+                                                          color: Colors
+                                                              .black,
+                                                        )
+                                                            : const Icon(
+                                                          Icons
+                                                              .favorite_outline,
+                                                          color: Colors
+                                                              .black,
+                                                        ))))
+                                          ])),
+                                    );
+                                  }))
                               : const Expanded(
-                                  child: Center(
-                                      child: Text(
-                                          "There isn't any data to show")));
+                              child: Center(
+                                  child: Text(
+                                      "There isn't any data to show")));
                         })
                   ],
                 )),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  List<Widget> body = [
+    HomePageTab(),
+    Favorites(),
+    const AddItem(),
+    const Cart(),
+    const ProfileScreen()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ItemsProvider>(
+      builder: (BuildContext context, favoriteProvider, child) {
+        return SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.grey[200],
+            body: Center(child: body[_currentIndex],),
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.black),
               child: ClipRRect(
@@ -359,8 +394,13 @@ class HomePage extends StatelessWidget {
                   selectedItemColor: Colors.amber,
                   unselectedItemColor: Colors.grey,
                   type: BottomNavigationBarType.fixed,
-                  currentIndex: 0,
+                  currentIndex: _currentIndex,
                   selectedFontSize: 30,
+                  onTap: (int newIndex) {
+                    setState(() {
+                      _currentIndex = newIndex;
+                    });
+                  },
                   items: const [
                     BottomNavigationBarItem(
                         icon: Icon(Icons.home_filled, size: 32), label: "Home"),
@@ -375,37 +415,6 @@ class HomePage extends StatelessWidget {
                     BottomNavigationBarItem(
                         icon: Icon(Icons.person, size: 32), label: " Person"),
                   ],
-                  onTap: (int index) {
-                    switch (index) {
-                      case 1:
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Favorites()));
-
-                        break;
-                      case 2:
-                        Navigator.pop(context);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => AddItem()));
-                        break;
-                      case 3:
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Cart()));
-                        break;
-                      // case 4:
-                      //   Navigator.pop(context);
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => ));
-                      //   break;
-                    }
-                  },
                 ),
               ),
             ),

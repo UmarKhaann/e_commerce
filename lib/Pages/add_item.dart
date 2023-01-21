@@ -3,9 +3,6 @@ import 'package:e_commerce/provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'FavoritesPage.dart';
-import 'HomePage.dart';
-import 'cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -115,7 +112,6 @@ class _AddItemState extends State<AddItem> {
         builder: (BuildContext context, itemProvider, Widget? child) {
           return SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height * .7,
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
@@ -174,7 +170,7 @@ class _AddItemState extends State<AddItem> {
                             labelText: "Enter Description",
                             keyboardType: TextInputType.name)
                       ])),
-                  Expanded(child: Container()),
+                  SizedBox(height: MediaQuery.of(context).size.height *.12),
                   itemProvider.isLoading
                       ? const Padding(
                           padding: EdgeInsets.only(bottom: 18.0),
@@ -201,54 +197,6 @@ class _AddItemState extends State<AddItem> {
             ),
           );
         },
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.black),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-          child: BottomNavigationBar(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: Colors.amber,
-            unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: 2,
-            selectedFontSize: 30,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled, size: 32), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_rounded, size: 32),
-                  label: "Favorite"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.add, size: 32), label: "Add"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_bag, size: 32), label: "Cart"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person, size: 32), label: " Person"),
-            ],
-            onTap: (int index) {
-              switch (index) {
-                case 0:
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                  break;
-                case 1:
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Favorites()));
-                  break;
-                case 3:
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Cart()));
-                  break;
-              }
-            },
-          ),
-        ),
       ),
     );
   }

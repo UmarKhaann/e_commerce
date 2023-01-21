@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_commerce/Pages/HomePage.dart';
-import 'package:e_commerce/Pages/add_item.dart';
-import 'package:e_commerce/Pages/cart.dart';
 import 'package:e_commerce/provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +12,7 @@ class Favorites extends StatelessWidget {
       .snapshots();
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
 
-  void setFavorite(snapShot, index) {
+  void setFavorite(snapShot, index)async {
     bool fav;
     if (snapShot.data!.docs[index]["isFavorite"] != true) {
       fav = true;
@@ -56,17 +53,24 @@ class Favorites extends StatelessWidget {
                 if (snapShot.hasError) {
                   return const Center(child: Text("an error has occurred"));
                 }
+                String items = '';
+                snapShot.data!.docs.length != 1 ? items = "Items" : items = "Item";
                 return snapShot.data!.docs.isNotEmpty
-                    ? Padding(
+                    ? Column(
+                  children: [
+
+                    Text('${snapShot.data!.docs.length.toString()} $items', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),),
+                    Expanded(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 10),
                         child: GridView.builder(
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 150 / 205,
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 0,
-                                  crossAxisSpacing: 0),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 150 / 205,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 0,
+                              crossAxisSpacing: 0),
                           itemCount: snapShot.data!.docs.length,
                           itemBuilder: (context, index) {
                             return Center(
@@ -74,20 +78,20 @@ class Favorites extends StatelessWidget {
                                 children: [
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: 200,
                                         width: 150,
                                         decoration: BoxDecoration(
                                             borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(15)),
+                                            const BorderRadius.all(
+                                                Radius.circular(15)),
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
                                                 snapShot.data!.docs[index]
-                                                    ['imageUrl'],
+                                                ['imageUrl'],
                                               ),
                                             )),
                                       ),
@@ -97,7 +101,7 @@ class Favorites extends StatelessWidget {
                                       Text(
                                         "${snapShot.data!.docs[index]["title"]}",
                                         style:
-                                            const TextStyle(color: Colors.grey),
+                                        const TextStyle(color: Colors.grey),
                                       ),
                                       SizedBox(
                                         width: 160,
@@ -105,9 +109,9 @@ class Favorites extends StatelessWidget {
                                           height: 40,
                                           child: Row(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            CrossAxisAlignment.center,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
                                               RichText(
                                                 text: TextSpan(
@@ -119,15 +123,15 @@ class Favorites extends StatelessWidget {
                                                       ),
                                                       const WidgetSpan(
                                                           child: SizedBox(
-                                                        width: 5,
-                                                      )),
+                                                            width: 5,
+                                                          )),
                                                       TextSpan(
                                                         text:
-                                                            "${snapShot.data!.docs[index]["price"]}",
+                                                        "${snapShot.data!.docs[index]["price"]}",
                                                         style: const TextStyle(
                                                           fontSize: 17,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                          FontWeight.bold,
                                                         ),
                                                       )
                                                     ]),
@@ -163,7 +167,10 @@ class Favorites extends StatelessWidget {
                             );
                           },
                         ),
-                      )
+                      ),
+                    )
+                  ],
+                    )
                     : const Center(
                         child:
                             Text("There isn't anything selected as Favorite"),
@@ -171,54 +178,6 @@ class Favorites extends StatelessWidget {
               },
             );
           },
-        ),
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.black),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-          child: BottomNavigationBar(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: Colors.amber,
-            unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: 1,
-            selectedFontSize: 30,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled, size: 32), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_rounded, size: 32),
-                  label: "Favorite"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.add, size: 32), label: "Add"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_bag, size: 32), label: "Cart"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person, size: 32), label: " Person"),
-            ],
-            onTap: (int index) {
-              switch (index) {
-                case 0:
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                  break;
-                case 2:
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddItem()));
-                  break;
-                case 3:
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Cart()));
-                  break;
-              }
-            },
-          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:e_commerce/Components/custom_button.dart';
 import 'package:e_commerce/Pages/HomePage.dart';
 import 'package:e_commerce/Pages/WelcomePages/WelcomePage2.dart';
 import 'package:flutter/material.dart';
@@ -55,24 +56,13 @@ class WelcomePage1 extends StatelessWidget {
                             style: TextStyle(fontSize: 20, color: Colors.grey),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const WelcomePage2()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              minimumSize: const Size(100.0, 50.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15))),
-                          child: const Text(
-                            "Next",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        )
+                        CustomButton(title: "Next", onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const WelcomePage2()));
+                        })
                       ],
                     )
                   ],
