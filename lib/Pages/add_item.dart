@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:e_commerce/provider/Provider.dart';
+import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +19,15 @@ class _AddItemState extends State<AddItem> {
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  final titleController = TextEditingController();
+  final priceController = TextEditingController();
+  final categoryController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  final titleFocusNode = FocusNode();
+  final priceFocusNode = FocusNode();
+  final categoryFocusNode = FocusNode();
+  final descriptionFocusNode = FocusNode();
 
   Future<void> selectImage() async {
     final itemProvider = Provider.of<ItemsProvider>(context, listen: false);
@@ -41,10 +46,12 @@ class _AddItemState extends State<AddItem> {
       if (_formKey.currentState!.validate()) {
         if (itemProvider.imageFile != null) {
           itemProvider.setIsLoading(true);
+
           Reference ref = FirebaseStorage.instance.ref(
               '/images/${DateTime.now().millisecondsSinceEpoch.toString()}');
 
           UploadTask uploadTask = ref.putFile(itemProvider.imageFile!.absolute);
+
           Future.value(uploadTask).then((value) async {
             var newUrl = await ref.getDownloadURL();
             String id = DateTime.now().microsecondsSinceEpoch.toString();
@@ -55,7 +62,7 @@ class _AddItemState extends State<AddItem> {
               "id": id,
               "title": titleController.text.toString(),
               "price": priceController.text.toString(),
-              "category": categoryController.text.toString(),
+              "category": [categoryController.text.toString()],
               "description": descriptionController.text.toString(),
               "imageUrl": newUrl,
               "isFavorite": false,
@@ -93,6 +100,10 @@ class _AddItemState extends State<AddItem> {
     priceController.dispose();
     categoryController.dispose();
     descriptionController.dispose();
+    titleFocusNode.dispose();
+    priceFocusNode.dispose();
+    categoryFocusNode.dispose();
+    descriptionFocusNode.dispose();
     super.dispose();
   }
 
@@ -112,7 +123,7 @@ class _AddItemState extends State<AddItem> {
         builder: (BuildContext context, itemProvider, Widget? child) {
           return SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.height * .01),
               child: Column(
                 children: [
                   Stack(children: [
@@ -143,8 +154,8 @@ class _AddItemState extends State<AddItem> {
                             icon: Icon(Icons.add_a_photo,
                                 color: Colors.grey[600])))
                   ]),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .01,
                   ),
                   Form(
                       key: _formKey,
@@ -152,21 +163,25 @@ class _AddItemState extends State<AddItem> {
                         CustomInputField(
                             icon: const Icon(Icons.edit),
                             controller: titleController,
+                            focusNode: titleFocusNode,
                             labelText: "Enter Title",
                             keyboardType: TextInputType.name),
                         CustomInputField(
                             icon: const Icon(Icons.attach_money),
                             controller: priceController,
+                            focusNode: priceFocusNode,
                             labelText: "Enter Price",
                             keyboardType: TextInputType.number),
                         CustomInputField(
                             icon: const Icon(Icons.folder),
                             controller: categoryController,
+                            focusNode: categoryFocusNode,
                             labelText: "Enter Category",
                             keyboardType: TextInputType.name),
                         CustomInputField(
                             icon: const Icon(Icons.description),
                             controller: descriptionController,
+                            focusNode: descriptionFocusNode,
                             labelText: "Enter Description",
                             keyboardType: TextInputType.name)
                       ])),
@@ -208,6 +223,7 @@ class CustomInputField extends StatelessWidget {
       required this.labelText,
       required this.keyboardType,
       required this.icon,
+        required this.focusNode,
       Key? key})
       : super(key: key);
 
@@ -215,6 +231,7 @@ class CustomInputField extends StatelessWidget {
   final String labelText;
   final TextInputType keyboardType;
   final Icon icon;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -222,13 +239,10 @@ class CustomInputField extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20),
       child: TextFormField(
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return "Field cannot be empty";
-          } else {
-            return null;
-          }
+          return value!.isEmpty ? "Field cannot be empty" : null;
         },
         controller: controller,
+        focusNode: focusNode,
         textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
             prefixIcon: icon,

@@ -31,7 +31,7 @@ class ItemScreen extends StatelessWidget {
     }
     fireStore
         .doc(snapShot.data!.docs[index].id.toString())
-        .update({"isFavorite": fav ?? false});
+        .update({"isFavorite": fav});
   }
 
   @override

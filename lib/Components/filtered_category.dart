@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_commerce/provider/Provider.dart';
+import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Favorites extends StatelessWidget {
-  Favorites({Key? key}) : super(key: key);
+class FilteredCategory extends StatelessWidget {
+  final String category;
+  FilteredCategory({
+    required this.category,
+    Key? key}) : super(key: key);
 
   final firestore = FirebaseFirestore.instance
       .collection('Items')
@@ -21,7 +24,7 @@ class Favorites extends StatelessWidget {
     }
     fireStoreRef
         .doc(snapShot.data!.docs[index].id.toString())
-        .update({"isFavorite": fav ?? false});
+        .update({"isFavorite": fav});
   }
 
   @override
@@ -32,7 +35,7 @@ class Favorites extends StatelessWidget {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         centerTitle: true,
-        title: const Text("Favorites"),
+        title: Text(category),
         actions: const [
           Icon(Icons.filter_alt),
           SizedBox(
@@ -170,11 +173,11 @@ class Favorites extends StatelessWidget {
                       ),
                     )
                   ],
-                    )
+                )
                     : const Center(
-                        child:
-                            Text("There isn't anything selected as Favorite"),
-                      );
+                  child:
+                  Text("There isn't anything selected as Favorite"),
+                );
               },
             );
           },

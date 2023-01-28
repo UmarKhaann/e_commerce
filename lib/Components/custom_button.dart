@@ -14,9 +14,9 @@ class CustomButton extends StatelessWidget {
           minimumSize: const Size(100.0, 50.0),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15))),
-      child: const Text(
-        "Next",
-        style: TextStyle(fontSize: 20),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 20),
       ),
     );
   }

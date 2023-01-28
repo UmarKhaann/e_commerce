@@ -1,7 +1,5 @@
-import 'package:e_commerce/Pages/HomePage.dart';
-import 'package:e_commerce/Pages/WelcomePages/WelcomePage1.dart';
-import 'package:e_commerce/Pages/item_screen.dart';
-import 'package:e_commerce/provider/Provider.dart';
+import 'package:e_commerce/Pages/WelcomePages/welcome_page1.dart';
+import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +23,10 @@ class Ecommerce extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomePage1(),
+      home: const WelcomePage1(),
+      theme: ThemeData(
+        useMaterial3: false
+      ),
     );
   }
 }

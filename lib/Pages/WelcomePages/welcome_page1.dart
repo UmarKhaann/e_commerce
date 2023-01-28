@@ -1,6 +1,6 @@
 import 'package:e_commerce/Components/custom_button.dart';
-import 'package:e_commerce/Pages/HomePage.dart';
-import 'package:e_commerce/Pages/WelcomePages/WelcomePage2.dart';
+import 'package:e_commerce/Pages/home_page.dart';
+import 'package:e_commerce/Pages/WelcomePages/welcome_page2.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage1 extends StatelessWidget {
@@ -9,10 +9,11 @@ class WelcomePage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           children: [
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * .6,
               child: Padding(
                 padding: const EdgeInsets.only(top: 35.0, bottom: 10),
