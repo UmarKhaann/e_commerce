@@ -11,7 +11,6 @@ class FilteredCategory extends StatelessWidget {
 
   final firestore = FirebaseFirestore.instance
       .collection('Items')
-      .where('isFavorite', isEqualTo: true)
       .snapshots();
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
 
@@ -61,7 +60,6 @@ class FilteredCategory extends StatelessWidget {
                 return snapShot.data!.docs.isNotEmpty
                     ? Column(
                   children: [
-
                     Text('${snapShot.data!.docs.length.toString()} $items', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),),
                     Expanded(
                       child: Padding(
@@ -159,8 +157,11 @@ class FilteredCategory extends StatelessWidget {
                                           onPressed: () {
                                             setFavorite(snapShot, index);
                                           },
-                                          icon: const Icon(
+                                          icon: snapShot.data!.docs[index]["isFavorite"] ? const Icon(
                                             Icons.favorite,
+                                            color: Colors.black,
+                                          ) : const Icon(
+                                            Icons.favorite_outline,
                                             color: Colors.black,
                                           )),
                                     ),
