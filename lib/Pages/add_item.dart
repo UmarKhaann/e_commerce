@@ -58,11 +58,12 @@ class _AddItemState extends State<AddItem> {
             final db = firestore
                 .collection('Items')
                 .doc(id);
+            List<String> array = categoryController.text.trim().toString().split(",");
             db.set({
               "id": id,
               "title": titleController.text.toString(),
               "price": priceController.text.toString(),
-              "category": [categoryController.text.toString()],
+              "category": array,
               "description": descriptionController.text.toString(),
               "imageUrl": newUrl,
               "isFavorite": false,

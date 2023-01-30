@@ -202,7 +202,7 @@ class HomePageTab extends StatelessWidget {
                         fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: size.height * .02,
+                    height: size.height * .01,
                   ),
                   StreamBuilder<QuerySnapshot>(
                       stream: fireStore,
@@ -246,7 +246,7 @@ class HomePageTab extends StatelessWidget {
                                                   'image${snapShot.data!.docs[index].id}',
                                                   child: Container(
                                                       height: size.height *
-                                                          .24,
+                                                          .26,
                                                       width: size.width *
                                                           .44,
                                                       decoration: BoxDecoration(

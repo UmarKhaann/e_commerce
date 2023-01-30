@@ -3,15 +3,14 @@ import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../Pages/item_screen.dart';
+
 class FilteredCategory extends StatelessWidget {
   final String category;
   FilteredCategory({
     required this.category,
     Key? key}) : super(key: key);
 
-  final firestore = FirebaseFirestore.instance
-      .collection('Items')
-      .snapshots();
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
 
   void setFavorite(snapShot, index)async {
@@ -26,8 +25,24 @@ class FilteredCategory extends StatelessWidget {
         .update({"isFavorite": fav});
   }
 
+  navigateToItemScreen(context, snapShot, index, id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ItemScreen(
+                id: id,
+                isFavorite: snapShot.data!.docs[index]['isFavorite'],
+                title: snapShot.data!.docs[index]['title'],
+                price: snapShot.data!.docs[index]['price'],
+                description: snapShot.data!.docs[index]['description'],
+                imageUrl: snapShot.data!.docs[index]['imageUrl'])));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final firestore = FirebaseFirestore.instance
+        .collection('Items').where('category', arrayContains: category)
+        .snapshots();
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -138,7 +153,13 @@ class FilteredCategory extends StatelessWidget {
                                                     ]),
                                               ),
                                               IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  navigateToItemScreen(
+                                                      context,
+                                                      snapShot,
+                                                      index,
+                                                      snapShot.data!.docs[index].id.toString());
+                                                },
                                                 icon: const Icon(Icons.add),
                                               ),
                                             ],
@@ -175,9 +196,9 @@ class FilteredCategory extends StatelessWidget {
                     )
                   ],
                 )
-                    : const Center(
+                    : Center(
                   child:
-                  Text("There isn't anything selected as Favorite"),
+                  Text("There isn't anything data of category $category"),
                 );
               },
             );
