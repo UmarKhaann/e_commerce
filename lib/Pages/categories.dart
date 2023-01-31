@@ -1,6 +1,6 @@
 import 'package:e_commerce/Api/categories_type.dart';
 import 'package:e_commerce/Components/custom_list_tile.dart';
-import 'package:e_commerce/Components/filtered_category.dart';
+import 'package:e_commerce/Pages/filtered_category.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesScreen extends StatelessWidget {

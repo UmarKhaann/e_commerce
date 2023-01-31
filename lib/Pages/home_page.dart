@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_commerce/Components/filtered_category.dart';
+import 'package:e_commerce/Components/custom_positioned_favorite_button.dart';
+import 'package:e_commerce/Pages/filtered_category.dart';
+import 'package:e_commerce/Functions/functions.dart';
 import 'package:e_commerce/Pages/categories.dart';
 import 'package:e_commerce/Pages/favorites_page.dart';
 import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
-import 'package:e_commerce/Pages/item_screen.dart';
 import 'package:e_commerce/Pages/profile_screen.dart';
 import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -14,35 +15,6 @@ import '../Api/categories_type.dart';
 class HomePageTab extends StatelessWidget {
   HomePageTab({Key? key}) : super(key: key);
   final fireStore = FirebaseFirestore.instance.collection('Items').orderBy('id', descending: true).snapshots();
-  final fireStoreRef = FirebaseFirestore.instance.collection("Items");
-
-  void setFavorite(snapShot, index) {
-    bool fav;
-
-    // fav = !(snapShot.data!.docs[index]["isFavorite"]);
-
-    if (snapShot.data!.docs[index]["isFavorite"] != true) {
-      fav = true;
-    } else {
-      fav = false;
-    }
-    fireStoreRef
-        .doc(snapShot.data!.docs[index].id.toString())
-        .update({"isFavorite": fav});
-  }
-
-  navigateToItemScreen(context, snapShot, index, id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ItemScreen(
-                id: id,
-                isFavorite: snapShot.data!.docs[index]['isFavorite'],
-                title: snapShot.data!.docs[index]['title'],
-                price: snapShot.data!.docs[index]['price'],
-                description: snapShot.data!.docs[index]['description'],
-                imageUrl: snapShot.data!.docs[index]['imageUrl'])));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -313,7 +285,8 @@ class HomePageTab extends StatelessWidget {
                                                               IconButton(
                                                                   onPressed:
                                                                       () {
-                                                                    navigateToItemScreen(
+                                                                    Functions f = Functions();
+                                                                    f.navigateToItemScreen(
                                                                         context,
                                                                         snapShot,
                                                                         index,
@@ -323,35 +296,7 @@ class HomePageTab extends StatelessWidget {
                                                                   const Icon(Icons.add))
                                                             ])))
                                               ]),
-                                          Positioned(
-                                              right: 10,
-                                              top: 10,
-                                              child: CircleAvatar(
-                                                  backgroundColor:
-                                                  Colors.white,
-                                                  child: IconButton(
-                                                      onPressed: () {
-                                                        setFavorite(
-                                                            snapShot,
-                                                            index);
-                                                      },
-                                                      icon: snapShot
-                                                          .data!
-                                                          .docs[index]
-                                                      [
-                                                      'isFavorite']
-                                                          ? const Icon(
-                                                        Icons
-                                                            .favorite,
-                                                        color: Colors
-                                                            .black,
-                                                      )
-                                                          : const Icon(
-                                                        Icons
-                                                            .favorite_outline,
-                                                        color: Colors
-                                                            .black,
-                                                      ))))
+                                          CustomPositionedFavoriteButton(snapShot: snapShot, index: index, right: 10.0,)
                                         ])),
                                   );
                                 }))

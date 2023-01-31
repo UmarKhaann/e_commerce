@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/Components/custom_stack.dart';
 import 'package:e_commerce/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,18 +12,6 @@ class Favorites extends StatelessWidget {
       .where('isFavorite', isEqualTo: true)
       .snapshots();
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
-
-  void setFavorite(snapShot, index)async {
-    bool fav;
-    if (snapShot.data!.docs[index]["isFavorite"] != true) {
-      fav = true;
-    } else {
-      fav = false;
-    }
-    fireStoreRef
-        .doc(snapShot.data!.docs[index].id.toString())
-        .update({"isFavorite": fav});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,98 +62,7 @@ class Favorites extends StatelessWidget {
                               crossAxisSpacing: 0),
                           itemCount: snapShot.data!.docs.length,
                           itemBuilder: (context, index) {
-                            return Center(
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(15)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                snapShot.data!.docs[index]
-                                                ['imageUrl'],
-                                              ),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "${snapShot.data!.docs[index]["title"]}",
-                                        style:
-                                        const TextStyle(color: Colors.grey),
-                                      ),
-                                      SizedBox(
-                                        width: 160,
-                                        child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              RichText(
-                                                text: TextSpan(
-                                                    style: const TextStyle(
-                                                        color: Colors.black),
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: "\$",
-                                                      ),
-                                                      const WidgetSpan(
-                                                          child: SizedBox(
-                                                            width: 5,
-                                                          )),
-                                                      TextSpan(
-                                                        text:
-                                                        "${snapShot.data!.docs[index]["price"]}",
-                                                        style: const TextStyle(
-                                                          fontSize: 17,
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                        ),
-                                                      )
-                                                    ]),
-                                              ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(Icons.add),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Positioned(
-                                    right: 20,
-                                    top: 10,
-                                    child: CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Colors.white,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            setFavorite(snapShot, index);
-                                          },
-                                          icon: const Icon(
-                                            Icons.favorite,
-                                            color: Colors.black,
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+                            return CustomStack(snapShot: snapShot, index: index);
                           },
                         ),
                       ),
