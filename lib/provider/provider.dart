@@ -4,13 +4,20 @@ import 'package:flutter/foundation.dart';
 
 class ItemsProvider with ChangeNotifier {
 
-  final List _cart = [];
   File? _imageFile;
   bool _isLoading = false;
+  Map _cartValues = {};
 
-  get cart => _cart;
+  get cartValues => _cartValues;
   get imageFile => _imageFile;
   get isLoading => _isLoading;
+
+  void setCartValues(index, newValue){
+    if(!cartValues.containsKey(index)){
+      _cartValues[index] = newValue;
+    }
+    notifyListeners();
+  }
 
   void setIsLoading(newValue) {
     _isLoading = newValue;
@@ -25,19 +32,19 @@ class ItemsProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  void addToCart(obj) {
-    if(_cart.contains(obj)){
-      return;
-    }else{
-      _cart.add(obj);
-    }
-
-    notifyListeners();
-  }
-
-  void removeFromCart(obj){
-    _cart.remove(obj);
-    notifyListeners();
-  }
+  //
+  // void addToCart(obj) {
+  //   if(_cart.contains(obj)){
+  //     return;
+  //   }else{
+  //     _cart.add(obj);
+  //   }
+  //
+  //   notifyListeners();
+  // }
+  //
+  // void removeFromCart(obj){
+  //   _cart.remove(obj);
+  //   notifyListeners();
+  // }
 }

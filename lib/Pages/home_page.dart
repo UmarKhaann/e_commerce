@@ -14,7 +14,10 @@ import '../Api/categories_type.dart';
 
 class HomePageTab extends StatelessWidget {
   HomePageTab({Key? key}) : super(key: key);
-  final fireStore = FirebaseFirestore.instance.collection('Items').orderBy('id', descending: true).snapshots();
+  final fireStore = FirebaseFirestore.instance
+      .collection('Items')
+      .orderBy('id', descending: true)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class HomePageTab extends StatelessWidget {
           backgroundColor: Colors.grey[200],
           body: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,8 +43,7 @@ class HomePageTab extends StatelessWidget {
                                   hintText: "Search",
                                   contentPadding: const EdgeInsets.all(20),
                                   border: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(20)),
+                                      borderRadius: BorderRadius.circular(20)),
                                   suffixIcon: const Icon(Icons.search)))),
                       const SizedBox(
                         width: 10,
@@ -50,21 +52,25 @@ class HomePageTab extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                      child: ListView.builder(
-                          itemCount: categoriesType.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 30,right: 10,left: 10),
-                                child: Column(
-                                  children: [
-                                    categoriesType[index]["Name"] == "All"
-                                        ? GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const CategoriesScreen()));
+                    child: ListView.builder(
+                      itemCount: categoriesType.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              top: 30, right: 10, left: 10),
+                          child: Column(
+                            children: [
+                              categoriesType[index]["Name"] == "All"
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CategoriesScreen()));
                                       },
-                                          child: Container(
+                                      child: Container(
                                           decoration: const BoxDecoration(
                                             shape: BoxShape.circle,
                                             boxShadow: [
@@ -78,16 +84,24 @@ class HomePageTab extends StatelessWidget {
                                           child: CircleAvatar(
                                             radius: size.height * .04,
                                             backgroundColor: Colors.white,
-                                            child: const Icon(
-                                                Icons.all_inclusive),
+                                            child:
+                                                const Icon(Icons.all_inclusive),
                                           )),
-                                        )
-                                        : GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>FilteredCategory(category: categoriesType[index]["Name"])));
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    FilteredCategory(
+                                                        category:
+                                                            categoriesType[
+                                                                    index]
+                                                                ["Name"])));
                                       },
-                                          child: Container(
-                                      decoration: const BoxDecoration(
+                                      child: Container(
+                                        decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           boxShadow: [
                                             BoxShadow(
@@ -96,82 +110,85 @@ class HomePageTab extends StatelessWidget {
                                               spreadRadius: .5,
                                             )
                                           ],
-                                      ),
-                                      child: CircleAvatar(
+                                        ),
+                                        child: CircleAvatar(
                                           radius: size.height * .04,
                                           backgroundImage: AssetImage(
-                                              categoriesType[index]
-                                              ["Icon"]),
+                                              categoriesType[index]["Icon"]),
                                           backgroundColor: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                        ),
-                                    SizedBox(
-                                      height: size.height * .01,
-                                    ),
-                                    Text(
-                                      categoriesType[index]["Name"],
-                                    )
-                                  ],
-                                ));
-                          })),
-                  Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 5,
-                                spreadRadius: .1,
-                                color: Colors.grey.shade300)
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: size.height * .02, horizontal: 10),
-                          child: ListTile(
-                              horizontalTitleGap: 25,
-                              leading: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            blurRadius: 4,
-                                            color: Colors.grey,
-                                            spreadRadius: 2)
-                                      ],
-                                      borderRadius:
-                                      BorderRadius.circular(10)),
-                                  padding: const EdgeInsets.all(15),
-                                  child: const Icon(
-                                    Icons.monitor_heart,
-                                    color: Colors.black,
-                                  )),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "50% OFF",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 23),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("on all women's shoes"),
-                                ],
+                              SizedBox(
+                                height: size.height * .01,
                               ),
-                              trailing: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.black,
-                              )))),
+                              Text(
+                                categoriesType[index]["Name"],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            spreadRadius: .1,
+                            color: Colors.grey.shade300,
+                          )
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: size.height * .02, horizontal: 10),
+                      child: ListTile(
+                        horizontalTitleGap: 25,
+                        leading: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                boxShadow: const [
+                                  BoxShadow(
+                                      blurRadius: 4,
+                                      color: Colors.grey,
+                                      spreadRadius: 2)
+                                ],
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsets.all(15),
+                            child: const Icon(
+                              Icons.monitor_heart,
+                              color: Colors.black,
+                            )),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "50% OFF",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 23),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("on all women's shoes"),
+                          ],
+                        ),
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: size.height * .03,
                   ),
                   const Text(
                     "New Items",
-                    style: TextStyle(
-                        fontSize: 25, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: size.height * .01,
@@ -184,7 +201,7 @@ class HomePageTab extends StatelessWidget {
                             ConnectionState.waiting) {
                           return const Expanded(
                               child:
-                              Center(child: CircularProgressIndicator()));
+                                  Center(child: CircularProgressIndicator()));
                         }
                         if (snapShot.hasError) {
                           return const Center(
@@ -192,118 +209,139 @@ class HomePageTab extends StatelessWidget {
                         }
                         return snapShot.data!.docs.isNotEmpty
                             ? Expanded(
-                            flex: 2,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: snapShot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black,
-                                                width: 2),
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                17)),
-                                        child: Stack(children: [
-                                          Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              children: [
-                                                Hero(
-                                                  tag:
-                                                  'image${snapShot.data!.docs[index].id}',
-                                                  child: Container(
-                                                      height: size.height *
-                                                          .26,
-                                                      width: size.width *
-                                                          .44,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                              topRight:
-                                                              Radius.circular(
-                                                                  15),
-                                                              topLeft: Radius.circular(
-                                                                  15)),
-                                                          image: DecorationImage(
-                                                              fit: BoxFit
-                                                                  .cover,
-                                                              image: NetworkImage(snapShot
-                                                                  .data!
-                                                                  .docs[index]["imageUrl"])))),
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                  size.height * .01,
-                                                ),
-                                                Padding(
-                                                    padding:
-                                                    const EdgeInsets
-                                                        .only(
-                                                        left: 20),
-                                                    child: Text(
-                                                        "${snapShot.data!.docs[index]["title"]}",
-                                                        style: const TextStyle(
-                                                            color: Colors
-                                                                .grey,
-                                                            fontSize:
-                                                            16))),
-                                                SizedBox(
-                                                    width: 180,
-                                                    height:
-                                                    size.height *
-                                                        .04,
-                                                    child: Padding(
+                                flex: 2,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapShot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15),
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 2),
+                                                borderRadius:
+                                                    BorderRadius.circular(17)),
+                                            child: Stack(children: [
+                                              Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Hero(
+                                                      tag:
+                                                          'image${snapShot.data!.docs[index].id}',
+                                                      child: Container(
+                                                        height:
+                                                            size.height * .26,
+                                                        width: size.width * .44,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          15)),
+                                                          image:
+                                                              DecorationImage(
+                                                            fit: BoxFit.cover,
+                                                            image: NetworkImage(
+                                                              snapShot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ["imageUrl"],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: size.height * .01,
+                                                    ),
+                                                    Padding(
                                                         padding:
-                                                        const EdgeInsets
-                                                            .only(
-                                                            left:
-                                                            10),
-                                                        child: Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                            children: [
-                                                              RichText(
-                                                                  text: TextSpan(
-                                                                      style: const TextStyle(color: Colors.black),
-                                                                      children: [
+                                                            const EdgeInsets
+                                                                .only(left: 20),
+                                                        child: Text(
+                                                            " ${snapShot.data!.docs[index]["title"]}",
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontSize:
+                                                                        16))),
+                                                    SizedBox(
+                                                        width: 180,
+                                                        height:
+                                                            size.height * .04,
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 10),
+                                                            child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  RichText(
+                                                                      text: TextSpan(
+                                                                          style:
+                                                                              const TextStyle(color: Colors.black),
+                                                                          children: [
                                                                         const TextSpan(
-                                                                            text: " \$",
-                                                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                                        const WidgetSpan(child: SizedBox(width: 5)),
+                                                                          text:
+                                                                              "\$",
+                                                                          style: TextStyle(
+                                                                              color: Colors.grey,
+                                                                              ),
+                                                                        ),
+                                                                        const WidgetSpan(
+                                                                            child:
+                                                                                SizedBox(width: 5)),
                                                                         TextSpan(
-                                                                            text: "${snapShot.data!.docs[index]["price"]}",
-                                                                            style: const TextStyle(
+                                                                            text:
+                                                                                "${snapShot.data!.docs[index]["price"]}",
+                                                                            style:
+                                                                                const TextStyle(
                                                                               fontSize: 17,
-                                                                              fontWeight: FontWeight.w500,
+                                                                              fontWeight: FontWeight.bold,
                                                                             ))
                                                                       ])),
-                                                              IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Functions f = Functions();
-                                                                    f.navigateToItemScreen(
-                                                                        context,
-                                                                        snapShot,
-                                                                        index,
-                                                                        snapShot.data!.docs[index].id.toString());
-                                                                  },
-                                                                  icon:
-                                                                  const Icon(Icons.add))
-                                                            ])))
-                                              ]),
-                                          CustomPositionedFavoriteButton(snapShot: snapShot, index: index, right: 10.0,)
-                                        ])),
-                                  );
-                                }))
+                                                                  IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Functions
+                                                                            f =
+                                                                            Functions();
+                                                                        f.navigateToItemScreen(
+                                                                            context,
+                                                                            snapShot,
+                                                                            index,
+                                                                            snapShot.data!.docs[index].id.toString());
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          Icons
+                                                                              .add))
+                                                                ])))
+                                                  ]),
+                                              CustomPositionedFavoriteButton(
+                                                snapShot: snapShot,
+                                                index: index,
+                                                right: 10.0,
+                                              )
+                                            ])),
+                                      );
+                                    }))
                             : const Expanded(
-                            child: Center(
-                                child: Text(
-                                    "There isn't any data to show")));
+                                child: Center(
+                                    child:
+                                        Text("There isn't any data to show")));
                       })
                 ],
               )),
@@ -339,7 +377,9 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.grey[200],
-            body: Center(child: body[_currentIndex],),
+            body: Center(
+              child: body[_currentIndex],
+            ),
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.black),
               child: ClipRRect(

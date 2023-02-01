@@ -18,6 +18,8 @@ class _AddItemState extends State<AddItem> {
   final storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
+  Color btnTitleColor = Colors.black;
+  Color btnBgColor = Colors.white;
 
   final titleController = TextEditingController();
   final priceController = TextEditingController();
@@ -55,10 +57,9 @@ class _AddItemState extends State<AddItem> {
           Future.value(uploadTask).then((value) async {
             var newUrl = await ref.getDownloadURL();
             String id = DateTime.now().microsecondsSinceEpoch.toString();
-            final db = firestore
-                .collection('Items')
-                .doc(id);
-            List<String> array = categoryController.text.trim().toString().split(",");
+            final db = firestore.collection('Items').doc(id);
+            List<String> array =
+                categoryController.text.trim().toString().split(",");
             db.set({
               "id": id,
               "title": titleController.text.toString(),
@@ -93,6 +94,30 @@ class _AddItemState extends State<AddItem> {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  @override
+  void initState() {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        if ((titleController.text.isNotEmpty) &&
+            (priceController.text.isNotEmpty) &&
+            (categoryController.text.isNotEmpty) &&
+            (descriptionController.text.isNotEmpty)) {
+          setState(() {
+            btnTitleColor = Colors.white;
+            btnBgColor = Colors.grey;
+          });
+        } else {
+          setState(() {
+            btnTitleColor = Colors.black;
+            btnBgColor = Colors.white;
+          });
+        }
+      });
+    });
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -186,7 +211,7 @@ class _AddItemState extends State<AddItem> {
                             labelText: "Enter Description",
                             keyboardType: TextInputType.name)
                       ])),
-                  SizedBox(height: MediaQuery.of(context).size.height *.12),
+                  SizedBox(height: MediaQuery.of(context).size.height * .12),
                   itemProvider.isLoading
                       ? const Padding(
                           padding: EdgeInsets.only(bottom: 18.0),
@@ -195,19 +220,42 @@ class _AddItemState extends State<AddItem> {
                             color: Colors.black,
                           ),
                         )
-                      : ElevatedButton(
-                          onPressed: () {
-                            uploadItem();
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey)),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25.0, vertical: 15),
-                            child: Text("Add"),
-                          ),
-                        ),
+                      : (titleController.text.isNotEmpty) &&
+                              (priceController.text.isNotEmpty) &&
+                              (categoryController.text.isNotEmpty) &&
+                              (descriptionController.text.isNotEmpty)
+                          ? ElevatedButton(
+                              onPressed: () {
+                                uploadItem();
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(btnBgColor)),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25.0, vertical: 15),
+                                child: Text(
+                                  "Add",
+                                  style: TextStyle(color: btnTitleColor),
+                                ),
+                              ),
+                            )
+                          : AbsorbPointer(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(btnBgColor)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25.0, vertical: 15),
+                                  child: Text(
+                                    "Add",
+                                    style: TextStyle(color: btnTitleColor),
+                                  ),
+                                ),
+                              ),
+                            ),
                 ],
               ),
             ),
@@ -224,7 +272,7 @@ class CustomInputField extends StatelessWidget {
       required this.labelText,
       required this.keyboardType,
       required this.icon,
-        required this.focusNode,
+      required this.focusNode,
       Key? key})
       : super(key: key);
 
