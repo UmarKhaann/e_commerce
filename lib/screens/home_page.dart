@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/Components/custom_positioned_favorite_button.dart';
-import 'package:e_commerce/Pages/filtered_category.dart';
 import 'package:e_commerce/Functions/functions.dart';
-import 'package:e_commerce/Pages/categories.dart';
-import 'package:e_commerce/Pages/favorites_page.dart';
-import 'package:e_commerce/Pages/add_item.dart';
-import 'package:e_commerce/Pages/cart.dart';
-import 'package:e_commerce/Pages/profile_screen.dart';
+import 'package:e_commerce/screens/categories.dart';
+import 'package:e_commerce/screens/favorites_page.dart';
+import 'package:e_commerce/screens/add_item.dart';
+import 'package:e_commerce/screens/cart.dart';
+import 'package:e_commerce/screens/profile_screen.dart';
 import 'package:e_commerce/provider/provider.dart';
 import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
@@ -229,7 +228,7 @@ class HomePageTab extends StatelessWidget {
                                                           'image${snapShot.data!.docs[index].id}',
                                                       child: Container(
                                                         height:
-                                                            size.height * .26,
+                                                            size.height * .24,
                                                         width: size.width * .44,
                                                         decoration:
                                                             BoxDecoration(

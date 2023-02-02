@@ -1,15 +1,14 @@
-import 'package:e_commerce/Pages/WelcomePages/welcome_page1.dart';
-import 'package:e_commerce/Pages/add_item.dart';
-import 'package:e_commerce/Pages/categories.dart';
-import 'package:e_commerce/Pages/favorites_page.dart';
-import 'package:e_commerce/Pages/filtered_category.dart';
-import 'package:e_commerce/Pages/home_page.dart';
-import 'package:e_commerce/Pages/item_screen.dart';
-import 'package:e_commerce/Pages/profile_screen.dart';
+import 'package:e_commerce/screens/WelcomePages/welcome_page1.dart';
+import 'package:e_commerce/screens/add_item.dart';
+import 'package:e_commerce/screens/categories.dart';
+import 'package:e_commerce/screens/favorites_page.dart';
+import 'package:e_commerce/screens/filtered_category.dart';
+import 'package:e_commerce/screens/home_page.dart';
+import 'package:e_commerce/screens/item_screen.dart';
+import 'package:e_commerce/screens/profile_screen.dart';
 import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
-
-import '../Pages/WelcomePages/welcome_page2.dart';
+import '../screens/WelcomePages/welcome_page2.dart';
 
 class Routes{
   static Route<dynamic> generateRoute(RouteSettings settings){

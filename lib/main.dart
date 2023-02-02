@@ -1,4 +1,3 @@
-import 'package:e_commerce/Pages/WelcomePages/welcome_page1.dart';
 import 'package:e_commerce/provider/provider.dart';
 import 'package:e_commerce/utils/route_name.dart';
 import 'package:e_commerce/utils/routes.dart';

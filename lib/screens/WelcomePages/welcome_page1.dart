@@ -1,6 +1,4 @@
 import 'package:e_commerce/Components/custom_button.dart';
-import 'package:e_commerce/Pages/home_page.dart';
-import 'package:e_commerce/Pages/WelcomePages/welcome_page2.dart';
 import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
 
