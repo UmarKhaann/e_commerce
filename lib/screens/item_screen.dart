@@ -123,7 +123,14 @@ class ItemScreen extends StatelessWidget {
                                   child: SizedBox(
                                     width: 200,
                                     child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          provider.setCartValues(data['id'],
+                                              {
+                                                "title" : data['title'],
+                                                "price" : data['price'],
+                                                "imageUrl" : data['imageUrl']
+                                              });
+                                        },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.black,
                                             shape: RoundedRectangleBorder(
@@ -132,29 +139,19 @@ class ItemScreen extends StatelessWidget {
                                         child: Padding(
                                           padding:
                                           const EdgeInsets.symmetric(vertical: 20),
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              provider.setCartValues(data['id'],
-                                                  {
-                                                    "title" : data['title'],
-                                                    "price" : data['price'],
-                                                    "imageUrl" : data['imageUrl']
-                                                  });
-                                              },
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: const [
-                                                Icon(Icons.add),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  "Add To Cart",
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(Icons.add),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Add To Cart",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ],
                                           ),
                                         )),
                                   ),
