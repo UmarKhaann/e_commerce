@@ -18,7 +18,7 @@ class _AddItemState extends State<AddItem> {
   final storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
-  Color btnTitleColor = Colors.black;
+  Color btnTitleColor = Colors.blue;
   Color btnBgColor = Colors.white;
 
   final titleController = TextEditingController();
