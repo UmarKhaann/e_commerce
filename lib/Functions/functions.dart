@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
-import '../Pages/item_screen.dart';
 
 class Functions{
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
@@ -14,15 +14,13 @@ class Functions{
   }
 
   navigateToItemScreen(context, snapShot, index, id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ItemScreen(
-                id: id,
-                isFavorite: snapShot.data!.docs[index]['isFavorite'],
-                title: snapShot.data!.docs[index]['title'],
-                price: snapShot.data!.docs[index]['price'],
-                description: snapShot.data!.docs[index]['description'],
-                imageUrl: snapShot.data!.docs[index]['imageUrl'])));
+    Navigator.pushNamed(context, RoutesName.itemScreen, arguments: {
+      "id" : id,
+      "isFavorite": snapShot.data!.docs[index]['isFavorite'],
+      "title": snapShot.data!.docs[index]['title'],
+      "price": snapShot.data!.docs[index]['price'],
+      "description": snapShot.data!.docs[index]['description'],
+      "imageUrl": snapShot.data!.docs[index]['imageUrl']
+    });
   }
 }

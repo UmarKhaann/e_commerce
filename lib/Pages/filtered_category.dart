@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import '../Functions/functions.dart';
 
 class FilteredCategory extends StatelessWidget {
-  FilteredCategory({required this.category, Key? key}) : super(key: key);
+  FilteredCategory({required this.data, Key? key}) : super(key: key);
 
-  final String category;
+  dynamic data;
   final fireStoreRef = FirebaseFirestore.instance.collection("Items");
   Functions functions = Functions();
 
@@ -16,7 +16,7 @@ class FilteredCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     final firestore = FirebaseFirestore.instance
         .collection('Items')
-        .where('category', arrayContains: category)
+        .where('category', arrayContains: data['category'])
         .snapshots();
     return Scaffold(
         appBar: AppBar(
@@ -24,7 +24,7 @@ class FilteredCategory extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           centerTitle: true,
-          title: Text(category),
+          title: Text(data['category']),
           actions: const [Icon(Icons.filter_alt), SizedBox(width: 10)],
         ),
         body: SafeArea(child: Consumer<ItemsProvider>(
@@ -71,7 +71,7 @@ class FilteredCategory extends StatelessWidget {
                     )
                   : Center(
                       child: Text(
-                          "There isn't anything data of category $category"));
+                          "There isn't anything data of category ${data['category']}"));
             },
           );
         })));

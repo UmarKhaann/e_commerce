@@ -1,6 +1,7 @@
 import 'package:e_commerce/Components/custom_button.dart';
 import 'package:e_commerce/Pages/home_page.dart';
 import 'package:e_commerce/Pages/WelcomePages/welcome_page2.dart';
+import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage1 extends StatelessWidget {
@@ -46,11 +47,7 @@ class WelcomePage1 extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                            Navigator.pushReplacementNamed(context, RoutesName.home);
                           },
                           child: const Text(
                             "Skip",
@@ -58,11 +55,7 @@ class WelcomePage1 extends StatelessWidget {
                           ),
                         ),
                         CustomButton(title: "Next", onTap: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const WelcomePage2()));
+                          Navigator.pushNamed(context, RoutesName.welcomePage2);
                         })
                       ],
                     )

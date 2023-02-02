@@ -7,21 +7,10 @@ import '../Functions/functions.dart';
 
 class ItemScreen extends StatelessWidget {
   ItemScreen(
-      {required this.id,
-      required this.isFavorite,
-      required this.title,
-      required this.price,
-      required this.description,
-      required this.imageUrl,
+      {required this.data,
       Key? key})
       : super(key: key);
-
-  final String id;
-  final bool isFavorite;
-  final String title;
-  final String price;
-  final String description;
-  final String imageUrl;
+  dynamic data;
   final fireStore = FirebaseFirestore.instance.collection('Items');
 
   @override
@@ -29,7 +18,7 @@ class ItemScreen extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("Items")
-          .where('id', isEqualTo: id.toString())
+          .where('id', isEqualTo: data['id'].toString())
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,9 +38,9 @@ class ItemScreen extends StatelessWidget {
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * .45,
                           child: Hero(
-                            tag: 'image$id',
+                            tag: 'image${data["id"]}',
                             child: FittedBox(
-                                fit: BoxFit.fitWidth, child: Image.network(imageUrl)),
+                                fit: BoxFit.fitWidth, child: Image.network(data['imageUrl'])),
                           ),
                         ),
                         SizedBox(
@@ -84,11 +73,11 @@ class ItemScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      title,
+                                      data['title'],
                                       style: const TextStyle(
                                           fontSize: 22, fontWeight: FontWeight.w500),
                                     ),
-                                    Text('$price \$',
+                                    Text('${data["price"]} \$',
                                         style: const TextStyle(
                                             fontSize: 20, fontWeight: FontWeight.w900)),
                                   ],
@@ -105,7 +94,7 @@ class ItemScreen extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  description,
+                                  data['description'],
                                   style: const TextStyle(
                                       height: 1.5, fontSize: 16, color: Colors.grey),
                                 ),
@@ -145,11 +134,11 @@ class ItemScreen extends StatelessWidget {
                                           const EdgeInsets.symmetric(vertical: 20),
                                           child: GestureDetector(
                                             onTap: (){
-                                              provider.setCartValues(id,
+                                              provider.setCartValues(data['id'],
                                                   {
-                                                    "title" : title,
-                                                    "price" : price,
-                                                    "imageUrl" : imageUrl
+                                                    "title" : data['title'],
+                                                    "price" : data['price'],
+                                                    "imageUrl" : data['imageUrl']
                                                   });
                                               },
                                             child: Row(

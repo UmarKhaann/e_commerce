@@ -1,6 +1,6 @@
 import 'package:e_commerce/Api/categories_type.dart';
 import 'package:e_commerce/Components/custom_list_tile.dart';
-import 'package:e_commerce/Pages/filtered_category.dart';
+import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -72,7 +72,9 @@ class CategoriesScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> FilteredCategory(category: categoriesType[index + 1]['Name'])));
+                        Navigator.pushNamed(context, RoutesName.filteredCategory, arguments: {
+                          "category" : categoriesType[index + 1]['Name']
+                        });
                       },
                       child: CustomListTile(
                         imageUrl: categoriesType[index + 1]['Icon'],

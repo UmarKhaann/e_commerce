@@ -1,5 +1,7 @@
 import 'package:e_commerce/Pages/WelcomePages/welcome_page1.dart';
 import 'package:e_commerce/provider/provider.dart';
+import 'package:e_commerce/utils/route_name.dart';
+import 'package:e_commerce/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,10 +25,11 @@ class Ecommerce extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const WelcomePage1(),
       theme: ThemeData(
         useMaterial3: false
       ),
+      initialRoute: RoutesName.welcomePage1,
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }

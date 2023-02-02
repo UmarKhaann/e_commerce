@@ -8,6 +8,7 @@ import 'package:e_commerce/Pages/add_item.dart';
 import 'package:e_commerce/Pages/cart.dart';
 import 'package:e_commerce/Pages/profile_screen.dart';
 import 'package:e_commerce/provider/provider.dart';
+import 'package:e_commerce/utils/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Api/categories_type.dart';
@@ -90,15 +91,9 @@ class HomePageTab extends StatelessWidget {
                                     )
                                   : GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    FilteredCategory(
-                                                        category:
-                                                            categoriesType[
-                                                                    index]
-                                                                ["Name"])));
+                                        Navigator.pushNamed(context, RoutesName.filteredCategory, arguments: {
+                                          "category" : categoriesType[index]["Name"]
+                                        });
                                       },
                                       child: Container(
                                         decoration: const BoxDecoration(
